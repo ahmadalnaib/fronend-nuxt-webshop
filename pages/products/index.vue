@@ -3,6 +3,10 @@ import { ref } from 'vue'
 const products = ref([])
 const error = ref(null)
 
+const getFileName = (path) => {
+    return path.split('\\').pop();
+}
+
 try {
     const { data, error: fetchError } = await useFetch('http://webshop.test/api/products', {
         method: 'POST',
@@ -36,10 +40,11 @@ try {
                         <p class="text-gray-600"><strong>Manufacturer ID:</strong> {{ product.herstellerid }}</p>
                         <p class="text-gray-600"><strong>Order Number:</strong> {{ product.bestellnummer }}</p>
                         <p class="text-gray-600"><strong>Inventory Management Type:</strong> {{ product.bestandsfuehrung_art }}</p>
-                        <div class="text-gray-600">
-                            <strong>Image:</strong>
-                          
-                            <p><strong>File:</strong> {{ product.bilder.bild.bilddatei }}</p>
+                    <div class="text-gray-600">
+                        <strong>Image:</strong>
+                            <img :src="`http://webshop.test/api/${getFileName(product.bilder.bild.bilddatei)}`" alt="Product Image" class="w-full h-auto mt-2">
+                        
+                  <p><strong>File:</strong> {{ getFileName(product.bilder.bild.bilddatei) }}</p>
                             <p><strong>Type:</strong> {{ product.bilder.bild.bildtyp }}</p>
                             <p><strong>Source:</strong> {{ product.bilder.bild.bildsource }}</p>
                             <p><strong>Update Time:</strong> {{ product.bilder.bild.rowupdatetime }}</p>
